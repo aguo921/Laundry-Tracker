@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
   Text,
@@ -6,17 +5,44 @@ import {
   TextInput,
   Modal,
   Pressable,
-  FlatList
+  FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
 
-const AddLaundryModal = ({ modalVisible, setModalVisible }) => {
+const NumberInput = ({ value, setValue }) => (
+  <View style={{flexDirection: 'row'}}>           
+    <Pressable onPress={() => setValue(value - 1)}>
+      <Text>-</Text>
+    </Pressable>
+    <TextInput
+      onChangeText={setValue}
+      keyboardType="numeric"
+      value={value}
+    />
+    <Pressable onPress={() => setValue(value + 1)}>
+      <Text>+</Text>
+    </Pressable>
+  </View>
+)
+
+const AddLaundryModal = ({ data, setData, modalVisible, setModalVisible }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [maxWears, setMaxWears] = useState(1);
 
-  async function addLaundry() {
+  function addLaundry() {
+    const id = "id" + Math.random().toString(16).slice(2)
 
+    setData([
+      ...data, {
+        id: id,
+        name: name,
+        description: description,
+        maxWears: maxWears,
+        wears: 1,
+      }
+    ])
+    setModalVisible(false);
   }
 
   function closeModal() {
@@ -35,24 +61,23 @@ const AddLaundryModal = ({ modalVisible, setModalVisible }) => {
           <Pressable onPress={closeModal}>
             <Text>X</Text>
           </Pressable>
+          <Text>Name</Text>
           <TextInput
             onChangeText={setName}
-            placeholder="Name"
             value={name}
           />
+          <Text>Description</Text>
           <TextInput
             onChangeText={setDescription}
-            placeholder="Description"
             value={description}
           />
-          <TextInput
-            onChangeText={setMaxWears}
-            placeholder="Maximum number of wears"
-            keyboardType="numeric"
+          <Text>Maximum Number of Wears</Text>
+          <NumberInput
             value={maxWears}
+            setValue={setMaxWears}
           />
           <Pressable onPress={addLaundry}>
-            <Text>Save laundry item</Text>
+            <Text>Add laundry item</Text>
           </Pressable>
         </View>
       </View>
@@ -60,25 +85,116 @@ const AddLaundryModal = ({ modalVisible, setModalVisible }) => {
   );
 };
 
-const LaundryItem = ({ item }) => {
+const LaundryItem = ({ data, setData, item }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View>
-      <Text>{item.name}</Text>
-      <Text>{item.wears}/{item.max_wears} wears</Text>
+      <Pressable
+        onPress={() => {
+          setModalVisible(true);
+        }}
+      >
+        <Text>{item.name}</Text>
+      </Pressable>
+      <Text>{item.wears}/{item.maxWears} wears</Text>
+      <LaundryModal
+        data={data}
+        setData={setData}
+        item={item}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
-  );
+  )
 };
 
-const LaundryList = ({ data }) => {
+const LaundryModal = ({ data, setData, item, modalVisible, setModalVisible }) => {
+  const [name, setName] = useState(item.name);
+  const [description, setDescription] = useState(item.description);
+  const [maxWears, setMaxWears] = useState(item.maxWears);
+  const [wears, setWears] = useState(item.wears);
+
+  function updateLaundry() {
+    const updatedData = data.map(i => {
+      if (i.id == item.id) {
+        return {
+          ...i,
+          name: name,
+          description: description,
+          maxWears: maxWears,
+          wears: wears,
+        }
+      } else {
+        return i
+      }
+    })
+    setData(updatedData);
+    setModalVisible(false);
+  }
+
+  function deleteLaundry() {
+    setData(data.filter(i => i.id != item.id))
+    setModalVisible(false);
+  }
+
+  function closeModal() {
+    setModalVisible(false);
+  }
+
+  return (
+    <Modal
+      animationType="fade"
+      onRequestClose={closeModal}
+      transparent
+      visible={modalVisible}
+    >
+      <View>
+        <View>
+          <Pressable onPress={closeModal}>
+            <Text>X</Text>
+          </Pressable>
+          <Text>Name</Text>
+          <TextInput
+            onChangeText={setName}
+            value={name}
+          />
+          <Text>Description</Text>
+          <TextInput
+            onChangeText={setDescription}
+            value={description}
+          />
+          <Text>Maximum Number of Wears</Text>
+          <NumberInput
+            value={maxWears}
+            setValue={setMaxWears}
+          />
+          <Text>Current Number of Wears</Text>
+          <NumberInput
+            value={wears}
+            setValue={setWears}
+          />
+          <Pressable onPress={updateLaundry}>
+            <Text>Update laundry item</Text>
+          </Pressable>
+          <Pressable onPress={deleteLaundry}>
+            <Text>Delete laundry item</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
+  )
+}
+
+const LaundryList = ({ data, setData }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
       <FlatList
-        style={styles.item}
         data={data}
         keyExtractor={({id}) => id}
-        renderItem={LaundryItem}
+        renderItem={({item}) => <LaundryItem data={data} setData={setData} item={item} />}
       />
       <Pressable
         onPress={() => {
@@ -88,6 +204,8 @@ const LaundryList = ({ data }) => {
         <Text>+ Add laundry item</Text>
       </Pressable>
       <AddLaundryModal
+        data={data}
+        setData={setData}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
@@ -98,12 +216,6 @@ const LaundryList = ({ data }) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: 22,
-    },
-    item: {
-      padding: 10,
-      fontSize: 18,
-      height: 44,
     },
   });
 

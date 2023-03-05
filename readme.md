@@ -4,11 +4,12 @@ In this project, I am using React Native to develop an app to track the number o
 
 ## To-do
 
-- [ ] Add laundry item
-- [ ] Update laundry item
-- [ ] Delete laundry item
+- [x] Add laundry item
+- [x] Update laundry item
+- [x] Delete laundry item
 - [ ] Dirtiness factor
 - [ ] Weather factor
 - [ ] Wardrobe
 - [ ] Develop API
 - [ ] Connect with API
+- [ ] Log-in system
