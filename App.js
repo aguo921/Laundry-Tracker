@@ -6,12 +6,19 @@ import LaundryList from './Components/LaundryList';
 
 
 export default function App() {
-  const [data, setData] = useState([]);
+  const defaultData = [{
+    id: '1',
+    name: 'Shirt',
+    description: 'Red',
+    maxWears: 5,
+    wears: 1
+  }
+  ]
+  const [data, setData] = useState(defaultData);
 
   return (
     <View style={styles.container}>
-      <Text>Current Laundry</Text>
-      <LaundryList data={data} setData={setData} />
+      <LaundryList data={data} setData={setData} headline="Current Laundry"/>
       <StatusBar style="auto" />
     </View>
   );
@@ -20,8 +27,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#fff'
   },
 });
