@@ -46,6 +46,7 @@ const LaundryElement = (props: LaundryElementProps) => {
           <NumberInput
             value={wears}
             setValue={onChange}
+            vertical
           />
         </View>
         <View style={styles.info}>
@@ -69,14 +70,15 @@ const LaundryElement = (props: LaundryElementProps) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    margin: 5
+    margin: 10
   },
   name: {
     fontSize: 20,
     fontWeight: 'bold'
   },
   info: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginHorizontal: 10
   },
   input: {
     alignSelf: 'center',

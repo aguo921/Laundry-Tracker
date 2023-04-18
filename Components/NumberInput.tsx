@@ -6,44 +6,77 @@ import {
     StyleSheet
 } from 'react-native';
 import React from 'react';
-import { Entypo } from '@expo/vector-icons';
-
-// TODO: Vertical number input
+import { Entypo, AntDesign } from '@expo/vector-icons';
 
 type NumberInputProps = {
     value: number,
     setValue: (x: number) => void,
     label?: string,
-    vertical?: boolean
+    vertical?: void
 }
 
-const NumberInput = (props: NumberInputProps) => (
-  <View style={styles.container}>
+const NumberInput = (props: NumberInputProps) => {
+  function subtract() {
+    props.setValue(Math.max(0, props.value - 1))
+  }
+
+  function add() {
+    props.setValue(props.value + 1)
+  }
+
+  function onChange(value: string) {
+    if (!isNaN(+value)) {
+      props.setValue(Number(value))
+    }
+  }
+
+  return (
+  <View style={props.vertical == undefined ? styles.container : styles.containerVertical}>
     {props.label != undefined ? (
       <Text style={styles.label}>{props.label}</Text>    
     ) : (
       undefined
     )}
-    <Pressable
+    { props.vertical == undefined ? (
+      <Pressable
+        style={styles.button}
+        onPress={subtract}
+      >
+        <Entypo name="minus" size={20} color="black" />
+      </Pressable>
+    ) : (
+      <Pressable
       style={styles.button}
-      onPress={() => props.setValue(Math.max(0, props.value - 1))}
-    >
-      <Entypo name="minus" size={20} color="black" />
-    </Pressable>
+      onPress={add}
+      >
+        <AntDesign name="caretup" size={24} color="black" />
+      </Pressable>
+    )}
     <TextInput
-      onChangeText={() => props.setValue(props.value)}
+      onChangeText={onChange}
       keyboardType="numeric"
       value={props.value as unknown as string}
       style={styles.input}
     />
-    <Pressable
-      style={styles.button}
-      onPress={() => props.setValue(props.value + 1)}
-    >
-      <Entypo name="plus" size={20} color="black" />
-    </Pressable>
+
+    { props.vertical == undefined ? (
+      <Pressable
+        style={styles.button}
+        onPress={add}
+      >
+        <Entypo name="plus" size={20} color="black" />
+      </Pressable>
+    ) : (
+      <Pressable
+        style={styles.button}
+        onPress={subtract}
+      >
+        <AntDesign name="caretdown" size={24} color="black" />
+      </Pressable>
+    )}
+
   </View>
-)
+)}
 
 const styles = StyleSheet.create({
   container: {
@@ -51,9 +84,13 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 46
   },
+  containerVertical: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginHorizontal: 10
+  },
   button: {
-    alignSelf: 'center',
-    margin: 5
+    alignSelf: 'center'
   },
   input: {
     textAlign: 'center',
@@ -62,7 +99,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 40,
     padding: 5,
-    height: '100%'
+    height: '100%',
+    marginHorizontal: 5
   },
   label: {
     width: '40%',
