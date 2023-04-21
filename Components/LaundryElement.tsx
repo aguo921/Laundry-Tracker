@@ -1,9 +1,4 @@
-import {
-    StyleSheet,
-    Text,
-    View,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import LaundryItem from '../Models/LaundryItem';
 import LaundryModal from './LaundryModal';
@@ -18,9 +13,34 @@ type LaundryElementProps = {
 
 const LaundryElement = (props: LaundryElementProps) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [wears, setWears] = useState(props.item.wears);
+    const [name, setName] = useState(props.item.name);
+    const [description, setDescription] = useState(props.item.description);
+    const [maxWears, setMaxWears] = useState(props.item.maxWears);
+    const [wears, setWears] = useState(props.item.wears)
 
-    function onChange(value: number) {
+    function updateLaundry() {
+      const updatedData = props.data.map(i => {
+        if (i.id == props.item.id) {
+          return {
+            ...i,
+            name: name,
+            description: description,
+            maxWears: maxWears,
+            wears: wears,
+          }
+        } else {
+          return i
+        }
+      })
+      props.setData(updatedData);
+    }
+
+    
+    function deleteLaundry() {
+      props.setData(props.data.filter(i => i.id != props.item.id))
+    }
+
+    function updateWears(value: number) {
       setWears(value);
       const updatedData = props.data.map(i => {
         if (i.id == props.item.id) {
@@ -37,31 +57,43 @@ const LaundryElement = (props: LaundryElementProps) => {
 
     function openModal() {
       setModalVisible(true);
+      setName(props.item.name);
+      setDescription(props.item.description);
+      setMaxWears(props.item.maxWears);
+      setWears(props.item.wears);
     }
   
     return (
       
       <View style={styles.container}>
-        <View style={styles.input}>
-          <NumberInput
-            value={wears}
-            setValue={onChange}
-            vertical
-          />
-        </View>
+        <NumberInput
+          value={wears}
+          setValue={updateWears}
+          // vertical
+        />
+
         <View style={styles.info}>
           <Text style={styles.name}>{props.item.name}</Text>
           <Text style={styles.wear}>{props.item.wears}/{props.item.maxWears} wears</Text>
         </View>
+        
         <Pressable onPress={openModal} style={styles.edit}>
           <Entypo name="edit" size={24} color="black" />
         </Pressable>
+        
         <LaundryModal
-          data={props.data}
-          setData={props.setData}
-          item={props.item}
           modalVisible={modalVisible}
+          name={name}
+          description={description}
+          maxWears={maxWears}
+          wears={wears}
           setModalVisible={setModalVisible}
+          setName={setName}
+          setDescription={setDescription}
+          setMaxWears={setMaxWears}
+          setWears={setWears}
+          updateLaundry={updateLaundry}
+          deleteLaundry={deleteLaundry}
         />
       </View>
     )
@@ -70,7 +102,7 @@ const LaundryElement = (props: LaundryElementProps) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    margin: 10
+    marginVertical: 10
   },
   name: {
     fontSize: 20,
@@ -80,11 +112,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 10
   },
-  input: {
-    alignSelf: 'center',
-  },
   wear: {
-    color: 'gray'
+    color: 'gray',
+    fontSize: 16
   },
   edit: {
     float: 'right',

@@ -1,90 +1,61 @@
-import {
-    StyleSheet,
-    Text,
-    View,
-    Modal,
-} from 'react-native';
+import { StyleSheet, Text, View, Modal } from 'react-native';
 import React, { useState } from 'react';
 import NumberInput from './NumberInput';
 import TextFieldInput from './TextFieldInput';
-import LaundryItem from '../Models/LaundryItem';
 import CloseButton from './CloseButton';
 import TextButton from './TextButton';
-
-
-// TODO: Fix resetting of fields when opening the modal again
+import Headline from './Headline';
 
 type LaundryModalProps = {
-    data: LaundryItem[],
-    setData: (data: LaundryItem[]) => void,
-    item?: LaundryItem,
     modalVisible: boolean,
-    setModalVisible: (x: boolean) => void
+    name: string,
+    description: string,
+    maxWears: number,
+    wears: number,
+    setModalVisible: (modalVisible: boolean) => void,
+    setName: (name: string) => void,
+    setDescription: (description: string) => void,
+    setMaxWears: (maxWears: number) => void,
+    setWears: (wears: number) => void,
+    addLaundry?: () => void,
+    updateLaundry?: () => void,
+    deleteLaundry?: () => void
 }
 
 const LaundryModal = (props: LaundryModalProps) => {
-    const [name, setName] = useState(props.item == undefined ? '' : props.item.name);
-    const [description, setDescription] = useState(props.item == undefined ? '' : props.item.description);
-    const [maxWears, setMaxWears] = useState(props.item == undefined ? 1 : props.item.maxWears);
-    const [wears, setWears] = useState(props.item == undefined ? 1 : props.item.wears)
     const [error, setError] = useState(false)
 
     function addLaundry() {
-      if (name == "") {
+      if (props.name == "") {
         setError(true)
       } else {
-        const id = "id" + Math.random().toString(16).slice(2)
-
-        props.setData([
-            ...props.data, {
-                id: id,
-                name: name,
-                description: description,
-                maxWears: maxWears,
-                wears: 1,
-            }
-        ])
+        if (props.addLaundry != undefined) {
+          props.addLaundry();
+        }
         closeModal();
       }
     }
 
     function updateLaundry() {
-      if (props.item != undefined) {
-        if (name == "") {
-          setError(true)
-        } else {
-          const updatedData = props.data.map(i => {
-            if (i.id == props.item.id) {
-              return {
-                ...i,
-                name: name,
-                description: description,
-                maxWears: maxWears,
-                wears: wears,
-              }
-            } else {
-              return i
-            }
-          })
-          props.setData(updatedData);
-          closeModal();
+      if (props.name == "") {
+        setError(true)
+      } else {
+        if (props.updateLaundry != undefined) {
+          props.updateLaundry()
         }
+        closeModal();
       }
     }
 
     function deleteLaundry() {
-      if (props.item != undefined) {
-        props.setData(props.data.filter(i => i.id != props.item.id))
-        closeModal();
+      if (props.deleteLaundry != undefined) {
+        props.deleteLaundry();
       }
+      closeModal();
     }
   
     function closeModal() {
       props.setModalVisible(false);
-      setName("");
-      setDescription("");
-      setMaxWears(1);
-      setWears(1);
       setError(false);
     }
   
@@ -95,82 +66,71 @@ const LaundryModal = (props: LaundryModalProps) => {
         visible={props.modalVisible}
       >
         <View style={styles.container}>
-          { props.item == undefined ? (
-            <Text style={styles.headline}>Add Laundry Item</Text>
-          ) : (
-            <Text style={styles.headline}>Update Laundry Item</Text>
-          )}
+          <Headline content={props.addLaundry != undefined ? "Add Laundry Item" : "Update Laundry Item"} />
           <CloseButton onPress={closeModal} />
 
           <View style={styles.innerContainer}>
-          { error == true ? (
-            <Text style={styles.error}>Name is required.</Text>
-          ) : (
-            undefined
-          )}
+            <Text style={styles.error}>{error ? "Name is required" : undefined}</Text>
 
             <TextFieldInput
-              value={name}
-              setValue={setName}
+              value={props.name}
+              setValue={props.setName}
               label="Name"
             />
 
             <TextFieldInput
-              value={description}
-              setValue={setDescription}
+              value={props.description}
+              setValue={props.setDescription}
               label="Description"
             />
 
-            <NumberInput
-              value={maxWears}
-              setValue={setMaxWears}
-              label="Maximum Wears"
-            />
+            <View style={styles.numberInputContainer}>
+              <NumberInput
+                value={props.maxWears}
+                setValue={props.setMaxWears}
+                label="Maximum Wears"
+                width="50%"
+              />
 
-            <NumberInput
-              value={wears}
-              setValue={setWears}
-              label="Current Wears"
-            />
+              <NumberInput
+                value={props.wears}
+                setValue={props.setWears}
+                label="Current Wears"
+                width="50%"
+              />
             </View>
-
-            { props.item == undefined ? (
-              <View style={styles.bottomBar}>
-                <TextButton 
-                  onPress={addLaundry}
-                  label="Add"
-                  color="green"
-                />
-              </View>
-            ) : (
-                <View style={styles.bottomBar}>
-                  <TextButton
-                    onPress={updateLaundry}
-                    label="Update"
-                    color="green"
-                    width="50%"
-                  />
-                  <TextButton
-                    onPress={deleteLaundry}
-                    label="Delete"
-                    color="red"
-                    width="50%"
-                  />
-                </View>
-            )}
           </View>
+
+          { props.addLaundry != undefined ? (
+            <View style={styles.bottomBar}>
+              <TextButton 
+                onPress={addLaundry}
+                label="Add"
+                color="green"
+              />
+            </View>
+          ) : (
+            <View style={styles.bottomBar}>
+              <TextButton
+                onPress={updateLaundry}
+                label="Update"
+                color="green"
+                width="50%"
+              />
+              <TextButton
+                onPress={deleteLaundry}
+                label="Delete"
+                color="red"
+                width="50%"
+              />
+            </View>
+          )}
+        </View>
       </Modal>
     )
   }
 
 const styles = StyleSheet.create({
-  headline: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 10,
-    borderBottomWidth: 1,
-    backgroundColor: 'aliceblue'
-  },
   bottomBar: {
     marginTop: 10,
     flexDirection: 'row',
@@ -183,6 +143,9 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     padding: 10
+  },
+  numberInputContainer: {
+    flexDirection: 'row'
   }
 })
   
