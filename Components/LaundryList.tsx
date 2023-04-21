@@ -1,62 +1,19 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-} from 'react-native';
-import React, { useState } from 'react';
-import LaundryModal from './LaundryModal';
-import LaundryElement from './LaundryElement';
-import AddButton from './AddButton';
+import { FlatList } from 'react-native';
+import React from 'react';
 import LaundryItem from '../Models/LaundryItem';
+import LaundryElement from './LaundryElement';
 
 type LaundryListProps = {
-  data: LaundryItem[],
-  setData: (data: LaundryItem[]) => void,
-  headline: string
+    data: LaundryItem[],
+    setData: (data: LaundryItem[]) => void
 }
 
-const LaundryList = (props: LaundryListProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  return (
-    <View>
-      <Text style={styles.headline}>{props.headline}</Text>
-      <AddButton
-        onPress={() => {
-          setModalVisible(true)
-        }}
-      />
-      
-      <FlatList
+const LaundryList = (props: LaundryListProps) => (
+    <FlatList
         data={props.data}
         keyExtractor={({id}) => id}
         renderItem={({item}) => <LaundryElement data={props.data} setData={props.setData} item={item} />}
-        style={styles.list}
-      />
+    />
+)
 
-      <LaundryModal
-        data={props.data}
-        setData={props.setData}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-    headline: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      padding: 10,
-      marginBottom: 10,
-      borderBottomWidth: 1,
-      backgroundColor: 'aliceblue'
-    },
-    list: {
-      padding: 10
-    }
-  });
-
-export default LaundryList;
+export default LaundryList
