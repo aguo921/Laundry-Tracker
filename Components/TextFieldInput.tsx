@@ -1,20 +1,18 @@
-import {
-    Text,
-    View,
-    TextInput,
-    StyleSheet
-} from 'react-native';
+import { Text, View, TextInput, StyleSheet } from 'react-native';
 import React from 'react';
 
 type TextFieldInputProps = {
     value: string,
     setValue: (x: string) => void,
-    label: string,
+    label?: string,
 }
 
 const TextFieldInput = (props: TextFieldInputProps) => (
   <View style={styles.container}>
-    <Text style={styles.label}>{props.label}</Text>    
+    {props.label != undefined ? (
+      <Text style={styles.label}>{props.label}</Text>    
+    ) : undefined}
+    
     <TextInput
       onChangeText={props.setValue}
       value={props.value}
@@ -25,21 +23,18 @@ const TextFieldInput = (props: TextFieldInputProps) => (
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    padding: 5,
-    height: 46
+    margin: 5
   },
   input: {
     borderColor: 'black',
     borderRadius: 5,
     borderWidth: 1,
     padding: 5,
-    height: '100%'
+    height: 40
   },
   label: {
-    width: '40%',
     fontWeight: 'bold',
-    alignSelf: 'center'
+    marginBottom: 5
   }
 });
 

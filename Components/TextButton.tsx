@@ -1,8 +1,4 @@
-import {
-    StyleSheet,
-    Text,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, Text, Pressable } from 'react-native';
 import React from 'react';
 
 type TextButtonProps = {
@@ -30,7 +26,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
+        fontSize: 20
     }
 })
 
