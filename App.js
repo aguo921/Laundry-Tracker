@@ -1,9 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, FlatList, AsyncStorage } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
-import LaundryList from './Components/LaundryList';
-
-
+import CurrentLaundry from './Components/CurrentLaundry';
 
 export default function App() {
   const defaultData = [{
@@ -18,7 +16,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <LaundryList data={data} setData={setData} headline="Current Laundry"/>
+      <CurrentLaundry data={data} setData={setData}/>
       <StatusBar style="auto" />
     </View>
   );
