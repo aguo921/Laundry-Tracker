@@ -8,12 +8,16 @@ type LaundryListProps = {
     setData: (data: LaundryItem[]) => void
 }
 
-const LaundryList = (props: LaundryListProps) => (
+const LaundryList = (props: LaundryListProps) => {
+    const sortedLaundry = props.data.sort(
+        (a, b) => (a.wears/a.maxWears < b.wears/b.maxWears) ? 1 : (a.wears/a.maxWears > b.wears/b.maxWears) ? -1 : 0
+    )
+    return (
     <FlatList
         data={props.data}
         keyExtractor={({id}) => id}
-        renderItem={({item}) => <LaundryElement data={props.data} setData={props.setData} item={item} />}
+        renderItem={({item}) => <LaundryElement data={sortedLaundry} setData={props.setData} item={item} />}
     />
-)
+)}
 
 export default LaundryList
