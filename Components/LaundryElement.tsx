@@ -66,19 +66,15 @@ const LaundryElement = (props: LaundryElementProps) => {
     return (
       
       <View style={styles.container}>
-        <NumberInput
-          value={wears}
-          setValue={updateWears}
-          // vertical
-        />
+        <NumberInput value={wears} setValue={updateWears}/>
 
-        <View style={styles.info}>
+        <Pressable style={styles.info} onPress={openModal}>
           <Text style={styles.name}>{props.item.name}</Text>
-          <Text style={styles.wear}>{props.item.wears}/{props.item.maxWears} wears</Text>
-        </View>
-        
-        <Pressable onPress={openModal} style={styles.edit}>
-          <Entypo name="edit" size={24} color="black" />
+          <Text style={props.item.wears >= props.item.maxWears ? styles.fullWear : styles.wear}>{props.item.wears}/{props.item.maxWears} wears</Text>
+        </Pressable>
+
+        <Pressable style={styles.wash} onPress={() => updateWears(0)}>
+          <Entypo name="water" size={24} color="black" />
         </Pressable>
         
         <LaundryModal
@@ -110,14 +106,17 @@ const styles = StyleSheet.create({
   },
   info: {
     alignSelf: 'center',
-    marginHorizontal: 10
+    marginHorizontal: 10,
+  },
+  fullWear: {
+    color: 'red',
+    fontSize: 16
   },
   wear: {
     color: 'gray',
     fontSize: 16
   },
-  edit: {
-    float: 'right',
+  wash: {
     right: 0,
     position: 'absolute',
     alignSelf: 'center',
