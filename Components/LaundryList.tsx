@@ -5,7 +5,8 @@ import LaundryElement from './LaundryElement';
 
 type LaundryListProps = {
     data: LaundryItem[],
-    setData: (data: LaundryItem[]) => void
+    setData: (data: LaundryItem[]) => void,
+    multiplier: number
 }
 
 const LaundryList = (props: LaundryListProps) => {
@@ -16,7 +17,12 @@ const LaundryList = (props: LaundryListProps) => {
     <FlatList
         data={props.data}
         keyExtractor={({id}) => id}
-        renderItem={({item}) => <LaundryElement data={sortedLaundry} setData={props.setData} item={item} />}
+        renderItem={({item}) => <LaundryElement
+            data={sortedLaundry}
+            setData={props.setData}
+            item={item}
+            multiplier={props.multiplier}
+        />}
     />
 )}
 

@@ -8,7 +8,8 @@ import LaundryList from './LaundryList';
 
 type CurrentLaundryProps = {
   data: LaundryItem[],
-  setData: (data: LaundryItem[]) => void
+  setData: (data: LaundryItem[]) => void,
+  multiplier: number
 }
 
 const CurrentLaundry = (props: CurrentLaundryProps) => {
@@ -42,28 +43,28 @@ const CurrentLaundry = (props: CurrentLaundryProps) => {
 
   return (
     <View>
-      <Headline content="Current Laundry" />
+      <Headline content="Laundry" />
       <AddButton onPress={openModal} />
       <View style={styles.innerContainer}>
         {props.data.length > 0 ? (
-          <LaundryList data={props.data} setData={props.setData} />
+          <LaundryList data={props.data} setData={props.setData} multiplier={props.multiplier}/>
         ) : (
           <Text>Currently no laundry!</Text>
         )}
       </View>
      
       <LaundryModal
-          modalVisible={modalVisible}
-          name={name}
-          description={description}
-          maxWears={maxWears}
-          wears={wears}
-          setModalVisible={setModalVisible}
-          setName={setName}
-          setDescription={setDescription}
-          setMaxWears={setMaxWears}
-          setWears={setWears}
-          addLaundry={addLaundry}
+        modalVisible={modalVisible}
+        name={name}
+        description={description}
+        maxWears={maxWears}
+        wears={wears}
+        setModalVisible={setModalVisible}
+        setName={setName}
+        setDescription={setDescription}
+        setMaxWears={setMaxWears}
+        setWears={setWears}
+        addLaundry={addLaundry}
       />
     </View>
   );

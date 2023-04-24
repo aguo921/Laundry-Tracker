@@ -132,7 +132,6 @@ const LaundryModal = (props: LaundryModalProps) => {
 
 const styles = StyleSheet.create({
   bottomBar: {
-    marginTop: 10,
     flexDirection: 'row',
   },
   error: {

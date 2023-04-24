@@ -8,7 +8,8 @@ import { Entypo } from '@expo/vector-icons';
 type LaundryElementProps = {
     data: LaundryItem[],
     setData: (data: LaundryItem[]) => void,
-    item: LaundryItem
+    item: LaundryItem,
+    multiplier: number
 }
 
 const LaundryElement = (props: LaundryElementProps) => {
@@ -66,11 +67,15 @@ const LaundryElement = (props: LaundryElementProps) => {
     return (
       
       <View style={styles.container}>
-        <NumberInput value={wears} setValue={updateWears}/>
+        <NumberInput value={wears} setValue={updateWears} multiplier={props.multiplier}/>
 
         <Pressable style={styles.info} onPress={openModal}>
-          <Text style={styles.name}>{props.item.name}</Text>
-          <Text style={props.item.wears >= props.item.maxWears ? styles.fullWear : styles.wear}>{props.item.wears}/{props.item.maxWears} wears</Text>
+          <Text style={styles.name}>
+            {props.item.name}
+          </Text>
+          <Text style={props.item.wears >= props.item.maxWears ? styles.fullWear : styles.wear}>
+            {props.item.wears}/{props.item.maxWears} wears
+          </Text>
         </Pressable>
 
         <Pressable style={styles.wash} onPress={() => updateWears(0)}>

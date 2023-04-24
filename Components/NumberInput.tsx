@@ -5,18 +5,26 @@ import { Entypo, AntDesign } from '@expo/vector-icons';
 type NumberInputProps = {
     value: number,
     setValue: (x: number) => void,
+    multiplier?: number,
     label?: string,
     vertical?: boolean,
     width?: number | string
 }
 
 const NumberInput = (props: NumberInputProps) => {
+  const width = props.width == undefined ? 'fit-content' : props.width
+  const multiplier = props.multiplier == undefined ? 1 : props.multiplier
+
+  function round(x: number) {
+    return Math.round(x*100)/100
+  }
+
   function subtract() {
-    props.setValue(Math.max(0, props.value - 1))
+    props.setValue(Math.max(0, round(props.value - multiplier)))
   }
 
   function add() {
-    props.setValue(props.value + 1)
+    props.setValue(round(props.value + multiplier))
   }
 
   function onChange(value: string) {
@@ -24,8 +32,6 @@ const NumberInput = (props: NumberInputProps) => {
       props.setValue(Number(value))
     }
   }
-
-  const width = props.width == undefined ? 'fit-content' : props.width
 
   return (
   <View style={{...styles.container, width: width}}>
