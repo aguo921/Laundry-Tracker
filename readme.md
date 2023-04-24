@@ -7,8 +7,9 @@ In this project, I am using React Native to develop an app to track the number o
 - [x] Add laundry item
 - [x] Update laundry item
 - [x] Delete laundry item
-- [ ] Dirtiness factor
-- [ ] Weather factor
+- [x] Dirtiness factor
+- [x] Weather factor
+- [x] Activity factor
 - [ ] Wardrobe
 - [ ] Develop API
 - [ ] Connect with API
