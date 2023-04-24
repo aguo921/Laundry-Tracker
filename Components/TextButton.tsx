@@ -10,7 +10,7 @@ type TextButtonProps = {
 
 
 const TextButton = (props: TextButtonProps) => {
-    const color = props.color == undefined ? "white" : props.color
+    const color = props.color == undefined ? "green" : props.color
     const width = props.width == undefined ? "100%" : props.width
     return (
         <Pressable style={{...styles.button, backgroundColor: color, width: width}} onPress={props.onPress}>
@@ -22,7 +22,9 @@ const TextButton = (props: TextButtonProps) => {
 const styles = StyleSheet.create({
     button: {
         textAlign: 'center',
-        padding: 10
+        padding: 10,
+        alignSelf: 'center',
+        marginTop: 15
     },
     text: {
         fontWeight: 'bold',
