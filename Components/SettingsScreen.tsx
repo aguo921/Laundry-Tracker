@@ -1,16 +1,15 @@
 import { StyleSheet, View, Text } from 'react-native';
 import React, { useState } from 'react';
-import Headline from './Headline';
 import RadioButton from './RadioButton';
 import TextButton from './TextButton';
 import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
 
-type SettingsProps = {
+type SettingsScreenProps = {
     multiplier: number,
     setMultiplier: (multiplier: number) => void
 }
 
-const Settings = (props: SettingsProps) => {
+const SettingsScreen = (props: SettingsScreenProps) => {
     const activityOptions = [
         {label: "Low", value: 2/3},
         {label: "Medium", value: 1},
@@ -44,7 +43,6 @@ const Settings = (props: SettingsProps) => {
 
     return (
         <View>
-            <Headline content="Settings" />
             <View style={styles.innerContainer}>
                 <RadioButton
                     options={activityOptions}
@@ -93,4 +91,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Settings;
+export default SettingsScreen;
