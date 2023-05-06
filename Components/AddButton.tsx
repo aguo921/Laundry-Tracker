@@ -1,7 +1,4 @@
-import {
-    StyleSheet,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, Text, Pressable } from 'react-native';
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
 
@@ -11,16 +8,13 @@ type AddButtonProps = {
 
 const AddButton = (props: AddButtonProps) => (
     <Pressable style={styles.button} onPress={props.onPress}>
-        <Entypo name="circle-with-plus" size={36} color="green" />
+        <Entypo name="circle-with-plus" size={50} color="green" />
     </Pressable>
 )
 
 const styles = StyleSheet.create({
     button: {
-        float: 'right',
-        position: 'absolute',
-        right: 0,
-        margin: 5,
+        alignSelf: 'center'
     }
 })
 

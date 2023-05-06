@@ -1,8 +1,4 @@
-import {
-    StyleSheet,
-    Text,
-    Pressable,
-} from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 import { Entypo } from '@expo/vector-icons'; 
 
