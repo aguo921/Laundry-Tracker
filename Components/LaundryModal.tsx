@@ -12,11 +12,13 @@ type LaundryModalProps = {
     description: string,
     maxWears: number,
     wears: number,
+    notes: string,
     setModalVisible: (modalVisible: boolean) => void,
     setName: (name: string) => void,
     setDescription: (description: string) => void,
     setMaxWears: (maxWears: number) => void,
     setWears: (wears: number) => void,
+    setNotes: (notes: string) => void,
     addLaundry?: () => void,
     updateLaundry?: () => void,
     deleteLaundry?: () => void
@@ -82,6 +84,12 @@ const LaundryModal = (props: LaundryModalProps) => {
               value={props.description}
               setValue={props.setDescription}
               label="Description"
+            />
+
+            <TextFieldInput
+              value={props.notes}
+              setValue={props.setNotes}
+              label="Notes"
             />
 
             <View style={styles.numberInputContainer}>

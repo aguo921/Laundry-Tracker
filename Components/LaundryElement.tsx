@@ -18,6 +18,7 @@ const LaundryElement = (props: LaundryElementProps) => {
     const [description, setDescription] = useState(props.item.description);
     const [maxWears, setMaxWears] = useState(props.item.maxWears);
     const [wears, setWears] = useState(props.item.wears)
+    const [notes, setNotes] = useState(props.item.notes)
 
     function updateLaundry() {
       const updatedData = props.data.map(i => {
@@ -28,6 +29,7 @@ const LaundryElement = (props: LaundryElementProps) => {
             description: description,
             maxWears: maxWears,
             wears: wears,
+            notes: notes
           }
         } else {
           return i
@@ -62,19 +64,25 @@ const LaundryElement = (props: LaundryElementProps) => {
       setDescription(props.item.description);
       setMaxWears(props.item.maxWears);
       setWears(props.item.wears);
+      setNotes(props.item.notes);
     }
   
     return (
       
       <View style={styles.container}>
-        <NumberInput value={wears} setValue={updateWears} multiplier={props.multiplier}/>
+        <View style={styles.wearContainer}>
+          <NumberInput value={wears} setValue={updateWears} multiplier={props.multiplier}/>
+          <Text style={props.item.wears >= props.item.maxWears ? styles.fullWear : styles.wear}>
+            {props.item.wears}/{props.item.maxWears} wears
+          </Text>
+        </View>
 
         <Pressable style={styles.info} onPress={openModal}>
           <Text style={styles.name}>
             {props.item.name}
           </Text>
-          <Text style={props.item.wears >= props.item.maxWears ? styles.fullWear : styles.wear}>
-            {props.item.wears}/{props.item.maxWears} wears
+          <Text style={styles.description}>
+            {props.item.description}
           </Text>
         </Pressable>
 
@@ -88,6 +96,7 @@ const LaundryElement = (props: LaundryElementProps) => {
           description={description}
           maxWears={maxWears}
           wears={wears}
+          notes={notes}
           setModalVisible={setModalVisible}
           setName={setName}
           setDescription={setDescription}
@@ -95,6 +104,7 @@ const LaundryElement = (props: LaundryElementProps) => {
           setWears={setWears}
           updateLaundry={updateLaundry}
           deleteLaundry={deleteLaundry}
+          setNotes={setNotes}
         />
       </View>
     )
@@ -105,6 +115,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: 10
   },
+  wearContainer: {
+    flexDirection: 'column'
+  },
   name: {
     fontSize: 20,
     fontWeight: 'bold'
@@ -113,13 +126,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 10,
   },
+  description: {
+    color: 'gray',
+    fontSize: 16
+  },
   fullWear: {
     color: 'red',
-    fontSize: 16
+    fontSize: 16,
+    alignSelf: 'center'
   },
   wear: {
     color: 'gray',
-    fontSize: 16
+    fontSize: 16,
+    alignSelf: 'center'
   },
   wash: {
     right: 0,

@@ -3,7 +3,8 @@ type LaundryItem = {
     name: string,
     description: string,
     maxWears: number,
-    wears: number
+    wears: number,
+    notes: string
 }
 
 export default LaundryItem
